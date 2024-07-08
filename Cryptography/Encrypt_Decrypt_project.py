@@ -1,96 +1,90 @@
 from tkinter import *
 from tkinter import messagebox
 import base64
-import os
 
 def encrypt():
-    password = code.get()
+    key = code.get()
 
-    if password == "1234":
+    if key:
         screen1 = Toplevel(screen)
-        screen1.title("encryption")
+        screen1.title("Encryption")
         screen1.geometry("400x200")
-        screen1.configure(bg = "cyan2")
+        screen1.configure(bg="cyan2")
 
-        message = text1.get(1.0,END)
-        encode_message = message.encode("ascii")
+        message = text1.get(1.0, END)
+        encode_message = message.encode("utf-8")
         base64_bytes = base64.b64encode(encode_message)
-        encrypt = base64_bytes.decode("ascii")
+        encrypt_message = base64_bytes.decode("utf-8")
 
-        Label(screen1,text = "ENCRYPT",font = "arial",fg = "black",bg = "cyan2").place(x = 10,y = 0)
-        text2 = Text(screen1,font = "Rpbote 10",bg = "white",relief = GROOVE,wrap = WORD,bd = 0)
-        text2.place(x = 10,y = 40,width = 380,height = 150)
+        Label(screen1, text="ENCRYPTED TEXT", font="arial", fg="black", bg="cyan2").place(x=10, y=0)
+        text2 = Text(screen1, font="Roboto 10", bg="white", relief=GROOVE, wrap=WORD, bd=0)
+        text2.place(x=10, y=40, width=380, height=150)
+        text2.insert(END, encrypt_message)
+    else:
+        messagebox.showerror("Encryption", "Enter a valid encryption key")
 
-        text2.insert(END,encrypt)
-
-    elif password == "":
-        messagebox.showerror("encryption","Input Password")
-
-    elif password != "1234":
-        messagebox.showerror("encryption","Invalid Password")
-    
-        
 
 def decrypt():
-    password = code.get()
+    key = code.get()
 
-    if password == "1234":
+    if key:
         screen2 = Toplevel(screen)
-        screen2.title("decryption")
+        screen2.title("Decryption")
         screen2.geometry("400x200")
-        screen2.configure(bg = "#00bd56")
+        screen2.configure(bg="#00bd56")
 
-        message = text1.get(1.0,END)
-        decode_message = message.encode("ascii")
+        message = text1.get(1.0, END)
+        decode_message = message.encode("utf-8")
         base64_bytes = base64.b64decode(decode_message)
-        decrypt = base64_bytes.decode("ascii")
+        decrypt_message = base64_bytes.decode("utf-8")
 
-        Label(screen2,text = "DECRYPT",font = "arial",fg = "black",bg = "#00bd56").place(x = 10,y = 0)
-        text2 = Text(screen2,font = "Rpbote 10",bg = "white",relief = GROOVE,wrap = WORD,bd = 0)
-        text2.place(x = 10,y = 40,width = 380,height = 150)
+        Label(screen2, text="DECRYPTED TEXT", font="arial", fg="black", bg="#00bd56").place(x=10, y=0)
+        text2 = Text(screen2, font="Roboto 10", bg="white", relief=GROOVE, wrap=WORD, bd=0)
+        text2.place(x=10, y=40, width=380, height=150)
+        text2.insert(END, decrypt_message)
+    else:
+        messagebox.showerror("Decryption", "Enter a valid decryption key")
 
-        text2.insert(END,decrypt)
 
-    elif password == "":
-        messagebox.showerror("encryption","Input Password")
+def reset():
+    code.set("")
+    text1.delete(1.0, END)
 
-    elif password != "1234":
-        messagebox.showerror("encryption","Invalid Password")
 
 def exit_screen():
     screen.destroy()
 
-def main_screen():
 
+def main_screen():
     global screen
     global code
     global text1
-    
-    screen=Tk()
+
+    screen = Tk()
     screen.geometry("375x398")
-    
-    #icon
-    image_icon = PhotoImage(file = "download.png")
-    screen.iconphoto(False,image_icon)
     screen.title("Encrypt_Decrypt_Project")
 
-    def reset():
-        code.set("")
-        text1.delete(1.0,END)
-    
-    Label(text = "Enter text for encryption and decryption",fg = "black",font = ("calbri",13,"bold")).place(x = 10,y = 10)
-    text1 = Text(font = "Robote 20",bg = "white",relief = GROOVE,wrap = WORD,bd = 0) 
-    text1.place(x = 10,y = 50,width = 355,height = 100)
-    
-    Label(text="Enter secret key for encryption and decryption",fg="black",font=("calibri",13,"bold")).place(x = 10,y = 170)
-    
-    code = StringVar()
-    Entry(textvariable = code,width = 19,bd = 0,font = ("arial",25),show = "*").place(x = 10,y = 200)
+    Label(text="Enter text for encryption and decryption", fg="black", font=("calibri", 13, "bold")).place(x=10, y=10)
+    text1 = Text(font="Roboto 20", bg="white", relief=GROOVE, wrap=WORD, bd=0)
+    text1.place(x=10, y=50, width=355, height=100)
 
-    Button(text = "Encrypt",height = "2",width = 24,bg = "cyan2",fg = "black",font =("Arial",9, "bold"),bd = 0,command = encrypt).place(x = 10,y = 250)
-    Button(text = "Decrypt",height = "2",width = 24,bg = "#00bd56",fg = "black",font =("Arial",9, "bold"),bd = 0,command = decrypt).place(x = 191,y = 250)
-    Button(text = "Reset",height = "2",width = 50,bg = "#1089ff",fg = "white",font =("Arial",9, "bold"),bd = 0,command = reset).place(x = 10,y = 300)
-    Button(text = "Exit", height = "2",width = 50,bg = "#ed3833",fg = "white",font =("Arial",9, "bold"),bd =0,command = exit_screen).place(x = 10, y = 350)
+    Label(text="Enter secret key for encryption and decryption", fg="black", font=("calibri", 13, "bold")).place(x=10,
+                                                                                                                y=170)
+
+    code = StringVar()
+    Entry(textvariable=code, width=19, bd=0, font=("arial", 25), show="*").place(x=10, y=200)
+
+    Button(text="Encrypt", height="2", width=24, bg="cyan2", fg="black", font=("Arial", 9, "bold"), bd=0,
+           command=encrypt).place(x=10, y=250)
+    Button(text="Decrypt", height="2", width=24, bg="#00bd56", fg="black", font=("Arial", 9, "bold"), bd=0,
+           command=decrypt).place(x=191, y=250)
+    Button(text="Reset", height="2", width=50, bg="#1089ff", fg="white", font=("Arial", 9, "bold"), bd=0,
+           command=reset).place(x=10, y=300)
+    Button(text="Exit", height="2", width=50, bg="#ed3833", fg="white", font=("Arial", 9, "bold"), bd=0,
+           command=exit_screen).place(x=10, y=350)
+
     screen.mainloop()
-    
-main_screen()
+
+
+if __name__ == "__main__":
+    main_screen()
